@@ -27,6 +27,7 @@ static const CGFloat kMLTextFieldThickLine = 2;
 
 @property (strong, nonatomic) MLUITextField *textField;
 @property (copy, nonatomic) NSString *textCache;
+@property (strong, nonatomic) UIView *prefixContainer;
 
 @end
 
@@ -329,6 +330,49 @@ static const CGFloat kMLTextFieldThickLine = 2;
 	_secureTextEntry = secureTextEntry;
 
 	self.textField.secureTextEntry = secureTextEntry;
+}
+
+- (void)setPrefix:(NSString *)prefix {
+    
+    if ([prefix isEqual: @""] || prefix == nil || prefix.length == 0) {
+        return;
+    }
+    
+    self.prefixContainer = [[UIView alloc] init];
+    self.prefixContainer.translatesAutoresizingMaskIntoConstraints = NO;
+
+    UILabel *prefixLabel = [[UILabel alloc] init];
+    prefixLabel.text = prefix;
+    prefixLabel.font = [UIFont ml_regularSystemFontOfSize:kMLFontsSizeMedium];
+    prefixLabel.textColor = MLStyleSheetManager.styleSheet.greyColor;
+    
+    prefixLabel.translatesAutoresizingMaskIntoConstraints = NO;
+
+    [self.prefixContainer addSubview:prefixLabel];
+
+    NSDictionary *views = @{@"view" : prefixLabel};
+    [self.prefixContainer addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[view]-0-|"
+                                                                           options:0
+                                                                           metrics:nil
+                                                                             views:views]];
+    [self.prefixContainer addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[view]-0-|"
+                                                                           options:0
+                                                                           metrics:nil
+                                                                             views:views]];
+    [self.prefixContainer setNeedsLayout];
+    
+    self.textField.leftView = self.prefixContainer;
+    self.textField.leftViewMode = UITextFieldViewModeAlways;
+    [self.prefixContainer layoutIfNeeded];
+}
+
+-(void)updateConstraintsPrefix {
+    CGRect prefixFrame = self.prefixContainer.frame;
+    self.placeholderLeadingConstraint.constant = prefixFrame.size.width;
+}
+
+- (void)layoutSubviews {
+    [self updateConstraintsPrefix];
 }
 
 #pragma mark Custom getters

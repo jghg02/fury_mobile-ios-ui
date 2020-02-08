@@ -19,6 +19,8 @@
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) UIView *activeTextField;
 
+@property (weak, nonatomic) IBOutlet MLTitledSingleLineTextField *textFieldWithPrefix;
+
 @end
 
 @implementation MLTitledTextFieldViewController
@@ -40,6 +42,7 @@
 	self.textField2.textInputControl.keyboardType = UIKeyboardTypeNumberPad;
 	[self.textFieldAlignCenter setupInnerTextWithAlignment:NSTextAlignmentCenter];
 	self.textFieldAlignCenter.helperDescription = @"Helper Description Centered";
+    [self setupTextFieldWithPrefix];
 }
 
 #pragma mark - Memory
@@ -92,6 +95,11 @@
 	UIEdgeInsets contentInsets = UIEdgeInsetsZero;
 	self.scrollView.contentInset = contentInsets;
 	self.scrollView.scrollIndicatorInsets = contentInsets;
+}
+
+#pragma mark TexField With Prefix
+- (void)setupTextFieldWithPrefix {
+    self.textFieldWithPrefix.prefix = @"$R";
 }
 
 #pragma mark TextField delegate

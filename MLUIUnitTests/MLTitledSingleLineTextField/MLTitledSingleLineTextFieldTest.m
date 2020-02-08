@@ -310,4 +310,36 @@
 	OCMVerifyAll(protocolMock);
 }
 
+- (void)testSetPrefix
+{
+    NSString *prefix = @"A prefix text";
+    MLTitledSingleLineTextField *textField = self.textField;
+    textField.textField = [[MLUITextField alloc] init];
+    textField.prefix = prefix;
+    
+    XCTAssertNotNil(textField.textField.leftView);
+    XCTAssertEqual(textField.textField.leftView.subviews.count, 1);
+    XCTAssertTrue([textField.textField.leftView.subviews.firstObject isKindOfClass:UIView.class]);
+}
+
+- (void)testSetPrefixWithNilValue
+{
+    NSString *prefix = nil;
+    MLTitledSingleLineTextField *textField = self.textField;
+    textField.textField = [[MLUITextField alloc] init];
+    textField.prefix = prefix;
+    
+    XCTAssertNil(textField.textField.leftView);
+}
+
+- (void)testSetPrefixWithEmptyValue
+{
+    NSString *prefix = @"";
+    MLTitledSingleLineTextField *textField = self.textField;
+    textField.textField = [[MLUITextField alloc] init];
+    textField.prefix = prefix;
+    
+    XCTAssertNil(textField.textField.leftView);
+}
+
 @end
